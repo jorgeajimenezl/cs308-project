@@ -1,13 +1,14 @@
 package com.example.cs308;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@SpringBootApplication
+import com.example.cs308.spring.AppConfig;
+
 public class Cs308ProjectApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Cs308ProjectApplication.class, args);
+		 ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 	}
 
 }
