@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscribe to Our Product Updates</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-container { max-width: 400px; margin: 0 auto; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Welcome to Our Product!</h1>
+        <p>Stay updated with our latest features and offers. Sign up with your email below.</p>
+        
+        <div th:if="${successMessage}" class="success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        
+        <form th:action="@{/subscribe}" th:object="${subscriber}" method="post">
+            <div>
+                <label for="email">Email Address:</label>
+                <input type="email" th:field="*{email}" id="email" placeholder="Enter your email" required/>
+                <div th:if="${#fields.hasErrors('email')}" class="error">
+                    <p th:each="err : ${#fields.errors('email')}" th:text="${err}"></p>
+                </div>
+            </div>
+            <br/>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+</body>
+</html>
