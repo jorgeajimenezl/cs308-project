@@ -1,8 +1,8 @@
-package com.example.cs308;
+package com.harbourspace.cs308;
 
 import org.junit.jupiter.api.Test;
 
-class Cs308ProjectApplicationTests {
+class ProjectApplicationTests {
 
 	@Test
 	void contextLoads() {
