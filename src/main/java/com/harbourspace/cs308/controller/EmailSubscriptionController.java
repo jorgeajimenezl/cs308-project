@@ -13,7 +13,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 
 @Controller
-public class EmailController {
+public class EmailSubscriptionController {
 
     @Autowired
     private SubscriberRepository repository;
