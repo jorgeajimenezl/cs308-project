@@ -19,7 +19,7 @@
             <p th:text="${successMessage}"></p>
         </div>
         
-        <form th:action="@{/subscribe}" th:object="${subscriber}" method="post">
+        <form th:action="@{/email-subscribe}" th:object="${subscriber}" method="post">
             <div>
                 <label for="email">Email Address:</label>
                 <input type="email" th:field="*{email}" id="email" placeholder="Enter your email" required/>
