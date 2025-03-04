@@ -31,6 +31,7 @@ public class EmailSubscriptionController {
         }
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("subscriber", subscriber);
             return "index";
         }
         
