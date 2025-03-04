@@ -18,7 +18,7 @@ public class EmailSubscriptionApiController {
     @Autowired
     private EmailSubscriberRepository repository;
 
-    @PostMapping("/api/subscribe")
+    @PostMapping("/api/email-subscribe")
     public ResponseEntity<?> subscribeApi(@Valid @RequestBody EmailSubscriber subscriber, BindingResult bindingResult,
                                           HttpServletRequest request) {
         if (repository.existsByEmail(subscriber.getEmail())) {

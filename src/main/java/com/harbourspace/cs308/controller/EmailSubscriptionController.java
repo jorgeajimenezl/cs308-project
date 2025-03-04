@@ -17,13 +17,13 @@ public class EmailSubscriptionController {
     @Autowired
     private EmailSubscriberRepository repository;
 
-    @GetMapping("/")
+    @GetMapping("/email-subscribe")
     public String showLandingPage(Model model) {
         model.addAttribute("subscriber", new EmailSubscriber());
         return "index";
     }
 
-    @PostMapping("/subscribe")
+    @PostMapping("/email-subscribe")
     public String subscribe(@Valid EmailSubscriber subscriber, BindingResult bindingResult,
                             HttpServletRequest request, Model model) {
         if (repository.existsByEmail(subscriber.getEmail())) {
