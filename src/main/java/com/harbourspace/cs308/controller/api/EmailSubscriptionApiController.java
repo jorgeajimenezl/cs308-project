@@ -1,7 +1,7 @@
 package com.harbourspace.cs308.controller.api;
 
-import com.harbourspace.cs308.model.Subscriber;
-import com.harbourspace.cs308.repository.SubscriberRepository;
+import com.harbourspace.cs308.model.EmailSubscriber;
+import com.harbourspace.cs308.repository.EmailSubscriberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,10 +16,10 @@ import java.util.Map;
 public class EmailSubscriptionApiController {
 
     @Autowired
-    private SubscriberRepository repository;
+    private EmailSubscriberRepository repository;
 
     @PostMapping("/api/subscribe")
-    public ResponseEntity<?> subscribeApi(@Valid @RequestBody Subscriber subscriber, BindingResult bindingResult,
+    public ResponseEntity<?> subscribeApi(@Valid @RequestBody EmailSubscriber subscriber, BindingResult bindingResult,
                                           HttpServletRequest request) {
         if (repository.existsByEmail(subscriber.getEmail())) {
             bindingResult.rejectValue("email", "error.subscriber", "This email has already been registered.");
@@ -33,9 +32,8 @@ public class EmailSubscriptionApiController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        subscriber.setSubscriptionTime(LocalDateTime.now());
         subscriber.setIpAddress(request.getRemoteAddr());
-        repository.addSubscriber(subscriber);
+        repository.save(subscriber);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Thank you for subscribing!");

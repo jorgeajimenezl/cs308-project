@@ -1,7 +1,7 @@
 package com.harbourspace.cs308.controller;
 
-import com.harbourspace.cs308.model.Subscriber;
-import com.harbourspace.cs308.repository.SubscriberRepository;
+import com.harbourspace.cs308.model.EmailSubscriber;
+import com.harbourspace.cs308.repository.EmailSubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,22 +10,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.time.LocalDateTime;
 
 @Controller
 public class EmailSubscriptionController {
 
     @Autowired
-    private SubscriberRepository repository;
+    private EmailSubscriberRepository repository;
 
     @GetMapping("/")
     public String showLandingPage(Model model) {
-        model.addAttribute("subscriber", new Subscriber());
+        model.addAttribute("subscriber", new EmailSubscriber());
         return "index";
     }
 
     @PostMapping("/subscribe")
-    public String subscribe(@Valid Subscriber subscriber, BindingResult bindingResult,
+    public String subscribe(@Valid EmailSubscriber subscriber, BindingResult bindingResult,
                             HttpServletRequest request, Model model) {
         if (repository.existsByEmail(subscriber.getEmail())) {
             bindingResult.rejectValue("email", "error.subscriber", "This email has already been registered.");
@@ -35,13 +34,11 @@ public class EmailSubscriptionController {
             return "index";
         }
         
-        subscriber.setSubscriptionTime(LocalDateTime.now());
-        subscriber.setIpAddress(request.getRemoteAddr());
-        
-        repository.addSubscriber(subscriber);
+        subscriber.setIpAddress(request.getRemoteAddr());        
+        repository.save(subscriber);
         
         model.addAttribute("successMessage", "Thank you for subscribing!");
-        model.addAttribute("subscriber", new Subscriber());
+        model.addAttribute("subscriber", new EmailSubscriber());
         return "index";
     }
 }
