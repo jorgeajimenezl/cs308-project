@@ -18,6 +18,7 @@ public class EmailSubscriber extends BaseEntity {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = true)
