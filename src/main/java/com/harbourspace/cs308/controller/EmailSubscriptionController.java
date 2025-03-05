@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -25,21 +26,24 @@ public class EmailSubscriptionController {
 
     @PostMapping("/email-subscribe")
     public String subscribe(@Valid EmailSubscriber subscriber, BindingResult bindingResult,
-                            HttpServletRequest request, Model model) {
+            HttpServletRequest request, Model model,
+            RedirectAttributes redirectAttributes) {
         if (repository.existsByEmail(subscriber.getEmail())) {
-            bindingResult.rejectValue("email", "error.subscriber", "This email has already been registered.");
+            bindingResult.rejectValue(
+                    "email",
+                    "error.subscriber",
+                    "This email has already been registered.");
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("subscriber", subscriber);
             return "index";
         }
-        
-        subscriber.setIpAddress(request.getRemoteAddr());        
+
+        subscriber.setIpAddress(request.getRemoteAddr());
         repository.save(subscriber);
-        
-        model.addAttribute("successMessage", "Thank you for subscribing!");
-        model.addAttribute("subscriber", new EmailSubscriber());
-        return "index";
+
+        redirectAttributes.addFlashAttribute("successMessage", "Thank you for subscribing!");
+
+        return "redirect:/email-subscribe";
     }
 }
