@@ -33,6 +33,10 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	implementation("org.xerial:sqlite-jdbc:3.49.1.0")
+	implementation("org.hibernate.orm:hibernate-community-dialects")
 }
 
 tasks.withType<Test> {
