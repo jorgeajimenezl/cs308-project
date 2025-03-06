@@ -9,6 +9,9 @@ import java.time.Instant;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

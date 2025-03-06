@@ -13,9 +13,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 public class PollOption extends BaseEntity {
-    @Id @GeneratedValue
-    private Long id;
-
     @Column(nullable = false)
     private String option;
 

@@ -2,6 +2,9 @@ package com.harbourspace.cs308.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.harbourspace.cs308.rest.Views;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,13 +13,11 @@ import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@Entity
 @Data
 @EqualsAndHashCode(callSuper=false)
-@Entity
+@JsonView(Views.Public.class)
 public class Poll extends BaseEntity {
-    @Id @GeneratedValue
-    private Long id;
-
     @Column(nullable = false)
     private String question;
 
