@@ -2,22 +2,18 @@ package com.harbourspace.cs308.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.harbourspace.cs308.dto.PollDto;
-import com.harbourspace.cs308.mapper.PollMapper;
 import com.harbourspace.cs308.model.Poll;
-import com.harbourspace.cs308.repository.PollRepository;
+import com.harbourspace.cs308.services.PollService;
 
 @RestController
 public class PollApiController {
     @Autowired
-    private PollRepository pollRepository;
-    @Autowired
-    private PollMapper pollMapper;
+    private PollService pollService;
 
     @GetMapping("/api/polls")
     public Page<Poll> getPolls(
@@ -25,16 +21,17 @@ public class PollApiController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir) {
-
-        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return pollRepository.findByIsPublicTrue(pageable);
+        return pollService.getPolls(page, size, sortBy, sortDir);
     }
 
     @PostMapping("/api/polls")
-    public Poll createPoll(@RequestBody PollDto createPollDto) {
-        Poll poll = pollMapper.toPoll(createPollDto);
-        return pollRepository.save(poll);
+    public ResponseEntity<Void> createPoll(@RequestBody PollDto createPollDto) {
+        pollService.createPoll(createPollDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/api/polls/{slug}")
+    public PollDto getPoll(@PathVariable String slug) {
+        return pollService.getPoll(slug);
     }
 }
