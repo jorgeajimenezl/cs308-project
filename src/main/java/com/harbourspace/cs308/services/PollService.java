@@ -1,5 +1,7 @@
 package com.harbourspace.cs308.services;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +29,10 @@ public class PollService {
 
     public Poll createPoll(PollDto createPollDto) {
         Poll poll = pollMapper.toPoll(createPollDto);
+        do {
+            UUID uuid = UUID.randomUUID();
+            poll.setSlug(uuid.toString());
+        } while (pollRepository.findBySlug(poll.getSlug()) != null);
         return pollRepository.save(poll);
     }
 
