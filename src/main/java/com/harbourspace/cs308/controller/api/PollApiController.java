@@ -1,6 +1,5 @@
 package com.harbourspace.cs308.controller.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +9,12 @@ import com.harbourspace.cs308.dto.PollDto;
 import com.harbourspace.cs308.model.Poll;
 import com.harbourspace.cs308.services.PollService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 public class PollApiController {
-    @Autowired
-    private PollService pollService;
+    private final PollService pollService;
 
     @GetMapping("/api/polls")
     public Page<Poll> getPolls(
