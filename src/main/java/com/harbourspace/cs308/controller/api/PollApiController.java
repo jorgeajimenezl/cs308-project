@@ -1,12 +1,15 @@
 package com.harbourspace.cs308.controller.api;
 
+import java.net.URI;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.harbourspace.cs308.dto.PollDto;
+import com.harbourspace.cs308.model.Poll;
 import com.harbourspace.cs308.services.PollService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,9 +25,14 @@ public class PollApiController {
     }
 
     @PostMapping("/api/polls")
-    public ResponseEntity<Void> createPoll(@RequestBody PollDto poll) {
-        pollService.createPoll(poll);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> createPoll(@RequestBody PollDto pollDto) {
+        Poll poll = pollService.createPoll(pollDto);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{slug}")
+                .buildAndExpand(poll.getSlug())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/api/polls/{slug}")
