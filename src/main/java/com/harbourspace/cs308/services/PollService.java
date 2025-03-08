@@ -32,11 +32,16 @@ public class PollService {
 
     public Poll createPoll(PollDto createPollDto) {
         Poll poll = pollMapper.toPoll(createPollDto);
-        do {
-            UUID uuid = UUID.randomUUID();
-            poll.setSlug(uuid.toString());
-        } while (pollRepository.findBySlug(poll.getSlug()) != null);
+        
         return pollRepository.save(poll);
+    }
+
+    public String generateSlug() {
+        String slug = UUID.randomUUID().toString();
+        while (pollRepository.existsBySlug(slug)) {
+            slug = UUID.randomUUID().toString();
+        }
+        return slug;
     }
 
     public PollDto getPoll(String slug) {
