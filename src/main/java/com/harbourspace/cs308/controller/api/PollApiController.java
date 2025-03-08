@@ -1,12 +1,12 @@
 package com.harbourspace.cs308.controller.api;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.harbourspace.cs308.dto.PollDto;
-import com.harbourspace.cs308.model.Poll;
 import com.harbourspace.cs308.services.PollService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,8 @@ public class PollApiController {
     private final PollService pollService;
 
     @GetMapping("/api/polls")
-    public Page<Poll> getPolls(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDir) {
-        return pollService.getPolls(page, size, sortBy, sortDir);
+    public ResponseEntity<Page<PollDto>> getPolls(Pageable pageable) {
+        return ResponseEntity.ok(pollService.getPolls(pageable));
     }
 
     @PostMapping("/api/polls")
@@ -32,7 +28,7 @@ public class PollApiController {
     }
 
     @GetMapping("/api/polls/{slug}")
-    public PollDto getPoll(@PathVariable String slug) {
-        return pollService.getPoll(slug);
+    public ResponseEntity<PollDto> getPoll(@PathVariable String slug) {
+        return ResponseEntity.ok(pollService.getPoll(slug));
     }
 }
