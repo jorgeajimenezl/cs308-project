@@ -22,8 +22,8 @@ public class PollApiController {
     }
 
     @PostMapping("/api/polls")
-    public ResponseEntity<Void> createPoll(@RequestBody PollDto createPollDto) {
-        pollService.createPoll(createPollDto);
+    public ResponseEntity<Void> createPoll(@RequestBody PollDto poll) {
+        pollService.createPoll(poll);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
