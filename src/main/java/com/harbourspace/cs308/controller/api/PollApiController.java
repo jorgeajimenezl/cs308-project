@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.harbourspace.cs308.dto.PollDto;
-import com.harbourspace.cs308.model.Poll;
 import com.harbourspace.cs308.services.PollService;
 
 @RestController
