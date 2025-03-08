@@ -9,5 +9,7 @@ import com.harbourspace.cs308.model.Poll;
 public interface PollRepository extends JpaRepository<Poll, Long> {
     Page<Poll> findByIsPublicTrue(Pageable pageable);
     
-    Poll findBySlug(String slug);    
+    Poll findBySlug(String slug);
+
+    boolean existsBySlug(String slug);    
 }
