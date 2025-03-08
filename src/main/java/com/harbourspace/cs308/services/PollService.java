@@ -13,6 +13,7 @@ import com.harbourspace.cs308.dto.PollDto;
 import com.harbourspace.cs308.mapper.PollMapper;
 import com.harbourspace.cs308.model.Poll;
 import com.harbourspace.cs308.repository.PollRepository;
+import com.harbourspace.cs308.exceptions.EntityNotFoundException;
 
 @Service
 public class PollService {
@@ -25,14 +26,12 @@ public class PollService {
         Page<Poll> page = pollRepository.findByIsPublicTrue(pageable);
 
         return new PageImpl<>(
-            page.getContent().stream().map(pollMapper::toPollDto).collect(Collectors.toList()),
-            pageable, page.getTotalElements()
-        );
+                page.getContent().stream().map(pollMapper::toPollDto).collect(Collectors.toList()),
+                pageable, page.getTotalElements());
     }
 
     public Poll createPoll(PollDto createPollDto) {
         Poll poll = pollMapper.toPoll(createPollDto);
-        
         return pollRepository.save(poll);
     }
 
@@ -45,7 +44,12 @@ public class PollService {
     }
 
     public PollDto getPoll(String slug) {
-        Poll poll = pollRepository.findBySlug(slug);        
+        Poll poll = pollRepository.findBySlug(slug);
+
+        if (poll == null) {
+            throw new EntityNotFoundException(Poll.class, slug);
+        }
+
         return pollMapper.toPollDto(poll);
     }
 }
