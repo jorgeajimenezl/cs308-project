@@ -4,7 +4,8 @@ import com.harbourspace.cs308.model.EmailSubscriber;
 import com.harbourspace.cs308.repository.EmailSubscriberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 public class EmailSubscriptionApiController {
-
-    @Autowired
-    private EmailSubscriberRepository repository;
+    private final EmailSubscriberRepository repository;
 
     @PostMapping("/api/email-subscribe")
     public ResponseEntity<?> subscribeApi(@Valid @RequestBody EmailSubscriber subscriber, BindingResult bindingResult,
