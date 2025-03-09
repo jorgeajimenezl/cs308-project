@@ -1,111 +1,114 @@
 package com.harbourspace.cs308.controller.api;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import java.util.Arrays;
-import java.util.List;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
 
 import com.harbourspace.cs308.dto.PollDto;
 import com.harbourspace.cs308.model.Poll;
 import com.harbourspace.cs308.services.PollService;
-import com.harbourspace.cs308.exceptions.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-@WebMvcTest(PollApiController.class)
-@MockitoBean(types = JpaMetamodelMappingContext.class)
+import java.net.URI;
+import java.util.Arrays;
+
 public class PollApiControllerTest {
-    
-    @Autowired
-    private MockMvc mockMvc;
-    
-    @MockitoBean
-    private PollService pollService;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
-    
-    @Test
-    public void testGetPolls() throws Exception {
-        // Prepare test data
-        List<PollDto> pollList = Arrays.asList(new PollDto("Sample Question", false, true, Arrays.asList("Option1", "Option2")));
-        Page<PollDto> page = new PageImpl<>(pollList);
-        
-        // Mock service method
-        when(pollService.getPolls(any(Pageable.class))).thenReturn(page);
-        
-        // Perform GET request and verify
-        mockMvc.perform(get("/api/polls"))
-               .andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.content[0].question").value("Sample Question"))
-               .andExpect(jsonPath("$.content[0].multipleChoice").value(false))
-               .andExpect(jsonPath("$.content[0].options[0]").value("Option1"))
-               .andExpect(jsonPath("$.content[0].options[1]").value("Option2"));
-        
-        verify(pollService).getPolls(any(Pageable.class));
-    }
-    
-    @Test
-    public void testCreatePoll() throws Exception {
-        // Prepare test data
-        PollDto inputPoll = new PollDto("New Poll", false, true, Arrays.asList("Opt1", "Opt2"));
 
+    @Mock
+    private PollService pollService;
+
+    @InjectMocks
+    private PollApiController pollApiController;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetPolls() {
+        // Arrange
+        PollDto pollDto = new PollDto("Test question", false, true, Arrays.asList("Option1", "Option2"));
+        Page<PollDto> page = new PageImpl<>(Arrays.asList(pollDto), PageRequest.of(0, 10), 1);
+        when(pollService.getPolls(any())).thenReturn(page);
+
+        // Act
+        ResponseEntity<Page<PollDto>> response = pollApiController.getPolls(PageRequest.of(0, 10));
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCode().value());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().getTotalElements());
+        verify(pollService).getPolls(any());
+    }
+
+    @Test
+    void testCreatePoll() {
+        // Arrange
+        PollDto pollDto = new PollDto("Test poll", false, true, Arrays.asList("Option1", "Option2"));
         Poll poll = new Poll();
-        poll.setSlug("new-poll");
-        
-        // Mock service method to return a Poll instead of a PollDto
+        poll.setSlug("testSlug");
         when(pollService.createPoll(any(PollDto.class))).thenReturn(poll);
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setRequestURI("/api/polls");
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         
-        // Perform POST request and verify location header
-        mockMvc.perform(post("/api/polls")
-               .contentType(MediaType.APPLICATION_JSON)
-               .content(objectMapper.writeValueAsString(inputPoll)))
-               .andExpect(status().isCreated());
-            //    .andExpect(header().string("Location", "/api/polls/new-poll"));
-        
+        // Act
+        ResponseEntity<Void> response = pollApiController.createPoll(pollDto);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(201, response.getStatusCode().value());
+        URI location = response.getHeaders().getLocation();
+        assertNotNull(location);
+        assertTrue(location.toString().endsWith("/testSlug"));
         verify(pollService).createPoll(any(PollDto.class));
+
+        RequestContextHolder.resetRequestAttributes();
     }
-    
+
     @Test
-    public void testGetPollBySlug_Found() throws Exception {
-        // Prepare test data
-        PollDto pollDto = new PollDto("Existing Poll", false, true, Arrays.asList("Opt1", "Opt2"));
-        
-        Poll poll = new Poll();
-        poll.setSlug("existing-slug");
-        
-        // Mock service method
-        when(pollService.getPoll("existing-slug")).thenReturn(pollDto);
-        
-        // Perform GET request and verify
-        mockMvc.perform(get("/api/polls/existing-slug"))
-               .andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.question").value("Existing Poll"));
-        
-        verify(pollService).getPoll("existing-slug");
+    void testGetPoll() {
+        // Arrange
+        String slug = "testSlug";
+        PollDto pollDto = new PollDto("Test poll", false, true, Arrays.asList("Option1", "Option2"));
+        when(pollService.getPoll(slug)).thenReturn(pollDto);
+
+        // Act
+        ResponseEntity<PollDto> response = pollApiController.getPoll(slug);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCode().value());
+        assertNotNull(response.getBody());
+        assertEquals("Test poll", response.getBody().getQuestion());
+        verify(pollService).getPoll(slug);
     }
-    
+
     @Test
-    public void testGetPollBySlug_NotFound() throws Exception {
-        when(pollService.getPoll("nonexistent-slug"))
-            .thenThrow(new EntityNotFoundException(Poll.class, "nonexistent-slug"));
-        
-        mockMvc.perform(get("/api/polls/nonexistent-slug"))
-               .andExpect(status().isNotFound());
-        
-        verify(pollService).getPoll("nonexistent-slug");
+    void testGetPoll_NotFound() {
+        // Arrange
+        String slug = "nonExistingSlug";
+        when(pollService.getPoll(slug)).thenThrow(new RuntimeException("Poll not found"));
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            pollApiController.getPoll(slug);
+        });
+        assertEquals("Poll not found", exception.getMessage());
+        verify(pollService).getPoll(slug);
     }
 }

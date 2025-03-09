@@ -32,6 +32,7 @@ public class PollService {
 
     public Poll createPoll(PollDto createPollDto) {
         Poll poll = pollMapper.toPoll(createPollDto);
+        poll.setSlug(generateSlug());
         return pollRepository.save(poll);
     }
 
