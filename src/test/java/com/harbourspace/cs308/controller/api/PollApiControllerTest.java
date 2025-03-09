@@ -97,4 +97,18 @@ public class PollApiControllerTest {
         assertEquals("Test poll", response.getBody().getQuestion());
         verify(pollService).getPoll(slug);
     }
+
+    @Test
+    void testGetPoll_NotFound() {
+        // Arrange
+        String slug = "nonExistingSlug";
+        when(pollService.getPoll(slug)).thenThrow(new RuntimeException("Poll not found"));
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            pollApiController.getPoll(slug);
+        });
+        assertEquals("Poll not found", exception.getMessage());
+        verify(pollService).getPoll(slug);
+    }
 }
