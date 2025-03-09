@@ -25,7 +25,7 @@ import com.harbourspace.cs308.exceptions.EntityNotFoundException;
 
 @WebMvcTest(PollApiController.class)
 @MockitoBean(types = JpaMetamodelMappingContext.class)
-public class PollApiControllerTest {
+public class PollApiControllerIntegrationTest {
     
     @Autowired
     private MockMvc mockMvc;
@@ -38,14 +38,11 @@ public class PollApiControllerTest {
     
     @Test
     public void testGetPolls() throws Exception {
-        // Prepare test data
         List<PollDto> pollList = Arrays.asList(new PollDto("Sample Question", false, true, Arrays.asList("Option1", "Option2")));
         Page<PollDto> page = new PageImpl<>(pollList);
         
-        // Mock service method
         when(pollService.getPolls(any(Pageable.class))).thenReturn(page);
         
-        // Perform GET request and verify
         mockMvc.perform(get("/api/polls"))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -59,13 +56,10 @@ public class PollApiControllerTest {
     
     @Test
     public void testCreatePoll() throws Exception {
-        // Prepare test data
         PollDto inputPoll = new PollDto("New Poll", false, true, Arrays.asList("Opt1", "Opt2"));
-
         Poll poll = new Poll();
         poll.setSlug("new-poll");
         
-        // Mock service method to return a Poll instead of a PollDto
         when(pollService.createPoll(any(PollDto.class))).thenReturn(poll);
         
         // Perform POST request and verify location header
@@ -80,16 +74,13 @@ public class PollApiControllerTest {
     
     @Test
     public void testGetPollBySlug_Found() throws Exception {
-        // Prepare test data
         PollDto pollDto = new PollDto("Existing Poll", false, true, Arrays.asList("Opt1", "Opt2"));
         
         Poll poll = new Poll();
         poll.setSlug("existing-slug");
         
-        // Mock service method
         when(pollService.getPoll("existing-slug")).thenReturn(pollDto);
         
-        // Perform GET request and verify
         mockMvc.perform(get("/api/polls/existing-slug"))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
