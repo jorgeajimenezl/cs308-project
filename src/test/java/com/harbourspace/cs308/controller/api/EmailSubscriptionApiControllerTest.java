@@ -2,7 +2,7 @@ package com.harbourspace.cs308.controller.api;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import com.harbourspace.cs308.exceptions.FieldValidationException;
+import com.harbourspace.cs308.exception.FieldValidationException;
 import com.harbourspace.cs308.model.EmailSubscriber;
 import com.harbourspace.cs308.repository.EmailSubscriberRepository;
 import jakarta.servlet.http.HttpServletRequest;
