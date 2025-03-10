@@ -1,4 +1,4 @@
-package com.harbourspace.cs308.exceptions;
+package com.harbourspace.cs308.exception;
 
 import java.util.HashMap;
 import java.util.Map;

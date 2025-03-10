@@ -6,7 +6,8 @@ import static org.mockito.Mockito.*;
 
 import com.harbourspace.cs308.dto.PollDto;
 import com.harbourspace.cs308.model.Poll;
-import com.harbourspace.cs308.services.PollService;
+import com.harbourspace.cs308.service.PollService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

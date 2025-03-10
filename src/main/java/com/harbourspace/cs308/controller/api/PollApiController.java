@@ -1,21 +1,16 @@
 package com.harbourspace.cs308.controller.api;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.harbourspace.cs308.dto.PollDto;
 import com.harbourspace.cs308.model.Poll;
-import com.harbourspace.cs308.services.PollService;
+import com.harbourspace.cs308.service.PollService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

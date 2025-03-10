@@ -1,4 +1,4 @@
-package com.harbourspace.cs308.services;
+package com.harbourspace.cs308.service;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -13,7 +13,7 @@ import com.harbourspace.cs308.dto.PollDto;
 import com.harbourspace.cs308.mapper.PollMapper;
 import com.harbourspace.cs308.model.Poll;
 import com.harbourspace.cs308.repository.PollRepository;
-import com.harbourspace.cs308.exceptions.EntityNotFoundException;
+import com.harbourspace.cs308.exception.EntityNotFoundException;
 
 @Service
 public class PollService {
