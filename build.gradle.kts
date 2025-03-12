@@ -38,6 +38,7 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 	implementation("org.hibernate.orm:hibernate-community-dialects")
+	implementation("org.kohsuke:github-api:2.0-alpha-3")
 }
 
 tasks.withType<Test> {
