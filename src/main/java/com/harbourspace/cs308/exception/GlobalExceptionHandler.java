@@ -35,4 +35,14 @@ public class GlobalExceptionHandler {
         errors.put("errors", fieldErrors);
         return errors;
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EntityNotFoundException.class)
+    public Map<String, Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+        Map<String, Object> errors = new HashMap<>();
+        errors.put("errors", error);
+        return errors;
+    }
 }
