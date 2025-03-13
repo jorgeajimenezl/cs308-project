@@ -1,6 +1,9 @@
 package com.harbourspace.cs308.model;
 
 import java.util.List;
+import java.time.Instant;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -11,25 +14,26 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-@Table(indexes = @Index(columnList = "slug"))
-public class Poll extends BaseEntity {
+@Entity
+@Table(indexes = {
+    @Index(columnList = "owner, name", unique = true)
+})
+public class TrackedRepository extends BaseEntity {
     @Column(nullable = false)
-    private String question;
+    private String owner;
+    
+    @Column(nullable = false)
+    private String name;
+
+    private Boolean active = true;
 
     @Column(nullable = false)
-    private Boolean multipleChoice = false;
+    private Instant lastTrackedTime;
 
-    @Column(nullable = false)
-    private Boolean isPublic = false;
-
-    @Column(unique = true, nullable = true)
-    private String slug;
-
-    @OneToMany(mappedBy = "poll")
-    private List<PollOption> options;
+    @OneToMany(mappedBy = "repository", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RepositoryActivity> activities;
 }

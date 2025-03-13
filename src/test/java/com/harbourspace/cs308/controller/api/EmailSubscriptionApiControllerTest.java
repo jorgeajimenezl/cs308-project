@@ -2,6 +2,8 @@ package com.harbourspace.cs308.controller.api;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
+import com.harbourspace.cs308.controller.EmailSubscriptionApiController;
 import com.harbourspace.cs308.exception.FieldValidationException;
 import com.harbourspace.cs308.model.EmailSubscriber;
 import com.harbourspace.cs308.repository.EmailSubscriberRepository;

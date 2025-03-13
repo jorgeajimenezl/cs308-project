@@ -1,4 +1,4 @@
-package com.harbourspace.cs308.controller.api;
+package com.harbourspace.cs308.controller;
 
 import com.harbourspace.cs308.exception.FieldValidationException;
 import com.harbourspace.cs308.model.EmailSubscriber;
