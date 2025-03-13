@@ -14,9 +14,9 @@ public class GithubApiController {
     @Autowired
     private GithubService githubService;
 
-    @PostMapping("/api/github/track/{owner}/{repo}")
-    public ResponseEntity<Void> trackRepository(@PathVariable String owner, @PathVariable String repo) {
-        githubService.trackRepository(owner, repo);
+    @PostMapping("/api/github/subscribe")
+    public ResponseEntity<Void> subscribe(@PathVariable String owner, @PathVariable String repo) {
+        githubService.subscribe(owner, repo);
         return ResponseEntity.ok().build();
     }    
 }

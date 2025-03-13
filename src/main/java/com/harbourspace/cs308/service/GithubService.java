@@ -13,7 +13,7 @@ public class GithubService {
     @Autowired
     private TrackedRepositoryRepository trackedRepository;
 
-    public void trackRepository(String owner, String name) {
+    public void subscribe(String owner, String name) {
         TrackedRepository repo = new TrackedRepository(
             owner, 
             name, 
