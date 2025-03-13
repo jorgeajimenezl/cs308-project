@@ -28,6 +28,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	runtimeOnly("com.h2database:h2")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
@@ -38,7 +39,6 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 	implementation("org.hibernate.orm:hibernate-community-dialects")
-	implementation("org.kohsuke:github-api:2.0-alpha-3")
 }
 
 tasks.withType<Test> {
