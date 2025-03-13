@@ -10,4 +10,5 @@ import com.harbourspace.cs308.model.TrackedRepository;
 
 public interface TrackedRepositoryRepository extends JpaRepository<TrackedRepository, Long> {
     Page<TrackedRepository> findByActiveTrue(Pageable pageable);
+    TrackedRepository findByOwnerAndName(String owner, String name);
 }
