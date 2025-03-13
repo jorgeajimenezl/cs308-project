@@ -6,7 +6,9 @@ import java.time.Instant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +19,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 @Entity
+@Table(indexes = {
+    @Index(columnList = "owner, name", unique = true)
+})
 public class TrackedRepository extends BaseEntity {
     @Column(nullable = false)
     private String owner;
