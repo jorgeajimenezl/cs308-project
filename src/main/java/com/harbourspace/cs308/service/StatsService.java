@@ -30,6 +30,10 @@ public class StatsService {
         
         Map<String, Integer> activityCount = new HashMap<>();
         for (RepositoryActivityType type : RepositoryActivityType.values()) {
+            if (type == RepositoryActivityType.UNKNOWN) {
+                continue;
+            }
+
             Long count = activityRepository.countByType(type);
             activityCount.put(type.name(), count.intValue());
         }
