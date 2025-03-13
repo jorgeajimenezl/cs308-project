@@ -26,7 +26,7 @@ public class TrackedRepository extends BaseEntity {
 
     private Boolean active = true;
 
-    @Column(name = "last_tracked_time", nullable = false)
+    @Column(nullable = false)
     private Instant lastTrackedTime;
 
     @OneToMany(mappedBy = "repository", cascade = CascadeType.ALL, orphanRemoval = true)
