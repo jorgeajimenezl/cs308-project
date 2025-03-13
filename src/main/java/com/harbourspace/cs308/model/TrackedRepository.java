@@ -1,6 +1,7 @@
 package com.harbourspace.cs308.model;
 
 import java.util.List;
+import java.time.Instant;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,7 +24,10 @@ public class TrackedRepository extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    private Boolean isAlive = true;
+    private Boolean active = true;
+
+    @Column(name = "last_tracked_time", nullable = false)
+    private Instant lastTrackedTime;
 
     @OneToMany(mappedBy = "repository", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RepositoryActivity> activities;
