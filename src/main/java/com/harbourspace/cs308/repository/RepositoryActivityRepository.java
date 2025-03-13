@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.harbourspace.cs308.model.RepositoryActivity;
+import com.harbourspace.cs308.model.RepositoryActivityType;
 
 public interface RepositoryActivityRepository extends JpaRepository<RepositoryActivity, Long> {
     Page<RepositoryActivity> findByRepositoryIdAndTimestampAfter(Long repositoryId, Instant timestamp, Pageable pageable);
+    Long countByType(RepositoryActivityType type);
 }
